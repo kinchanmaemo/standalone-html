@@ -47,8 +47,21 @@ function startApp() {
 	var currentDir = process.cwd();
 
 	if (output && html) {
-		standalone(inputPath, inputFile, outputPath);
+		standalone(inputPath, inputFile, outputPath, writeFile);
 	} else {
 		commandLine.help();
 	}
+}
+
+//write result to file
+function writeFile(resHtml, outputPath) {
+	fs.writeFile(outputPath, resHtml, function (err) {
+		if (err) {
+			console.log('');
+			console.log('File error: ' + err + '. Exit.');
+		} else {
+			console.log('');
+			console.log('All done. Exit.'.green);
+		}
+	});
 }
