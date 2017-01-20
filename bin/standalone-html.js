@@ -6,6 +6,7 @@ var fs = require('fs');
 var pkg = require('../package.json');
 var standalone = require('../index');
 var colors = require('colors');
+var minify = require('minify');
 
 var arg = process.argv;
 
@@ -14,6 +15,7 @@ commandLine
 	.version('standalone-html v' + pkg.version)
 	.usage('[options] <full path to source html>')
 	.option('-o, --output <directory>', 'full path to output file')
+	.option('-m, --minify', 'minify the html file')
 	.parse(arg)
 
 var html = commandLine.args[0];
@@ -47,10 +49,33 @@ function startApp() {
 	var currentDir = process.cwd();
 
 	if (output && html) {
-		standalone(inputPath, inputFile, outputPath, writeFile);
+		standalone(inputPath, inputFile, outputPath, getOpt);
 	} else {
 		commandLine.help();
 	}
+}
+
+//parse options 
+function getOpt(resHtml, outputPath) {
+	if (commandLine.minify) {
+		console.log('minify all!');
+		minifyFile(resHtml, outputPath);
+	} else {
+		writeFile(resHtml, outputPath);
+	}
+}
+
+//minify the result
+function minifyFile(resHtml, outputPath) {
+	minify(resHtml, function(error, data) {
+    if (error) {
+		console.log('minify : ');
+        console.error(error.message);
+	}
+    else {
+        writeFile(data, outputPath);
+	}
+});
 }
 
 //write result to file
