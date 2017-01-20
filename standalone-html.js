@@ -2,7 +2,7 @@ var fs = require('fs');
 var prog = require('commander');
 var path = require('path');
 var cheerio = require("cheerio");
-var cssB64 = require('css-b64-images');
+var cssB64 = require('css-b64-images-no-limit');
 var colors = require('colors');
 
 var imageTypes = {
@@ -14,7 +14,7 @@ var imageTypes = {
 	".webp": "image/webp"
 }
 
-var standalone = function (inputPath, inputFile, outputPath, writeFile) {
+var standalone = function (inputPath, inputFile, outputPath, getOpt) {
 	var $ = cheerio.load(inputFile);
 	$('html').find('link').each(function () {
 		if ($(this).attr('href')) {
@@ -89,7 +89,8 @@ var standalone = function (inputPath, inputFile, outputPath, writeFile) {
 			});
 		}
 	});
-	writeFile($.html(), outputPath);
+	
+	getOpt($.html(), outputPath);
 }
 
 module.exports = standalone;
