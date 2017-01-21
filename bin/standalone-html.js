@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 var commandLine = require('commander');
+var Promise = require('bluebird');
 var path = require('path');
-var fs = require('fs');
+var fs = Promise.promisifyAll(require('fs'));
 var pkg = require('../package.json');
 var standalone = require('../index');
 var colors = require('colors');
-var minify = require('minify');
+var minify = Promise.promisifyAll(require('html-minifier').minify);
 
 var arg = process.argv;
 
@@ -21,6 +22,12 @@ commandLine
 var html = commandLine.args[0];
 var output = commandLine.output ? commandLine.output : 'index_standalone.html';
 
+var opt = {
+	removeAttributeQuotes: false,
+	minifyCSS: false,
+	minifyJS: false,
+	collapseWhitespace: false
+};
 
 if (!html) {
 	commandLine.help();
@@ -31,7 +38,7 @@ if (!html) {
 			console.log('');
 			console.log('Proceed file : ' + html);
 			console.log('');
-			startApp(); 
+			startApp();
 		} else if (err.code == 'ENOENT') {
 			console.log('File does not exist.'.red + ' Exit.');
 			process.exit;
@@ -58,7 +65,8 @@ function startApp() {
 //parse options 
 function getOpt(resHtml, outputPath) {
 	if (commandLine.minify) {
-		console.log('minify all!');
+		console.log('');
+		console.log('minify all. Process may take a few minutes with large file.');
 		minifyFile(resHtml, outputPath);
 	} else {
 		writeFile(resHtml, outputPath);
@@ -67,15 +75,13 @@ function getOpt(resHtml, outputPath) {
 
 //minify the result
 function minifyFile(resHtml, outputPath) {
-	minify(resHtml, function(error, data) {
-    if (error) {
-		console.log('minify : ');
-        console.error(error.message);
-	}
-    else {
-        writeFile(data, outputPath);
-	}
-});
+	var resHtml = minify(resHtml, opt, function(err) {
+		if (err) {
+			console.log('error will processing file.');
+		}
+	});
+
+	writeFile(resHtml, outputPath);
 }
 
 //write result to file
