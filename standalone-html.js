@@ -1,7 +1,8 @@
-var fs = require('fs');
 var prog = require('commander');
+var Promise = require('bluebird');
+var fs = Promise.promisifyAll(require('fs'));
 var path = require('path');
-var cheerio = require("cheerio");
+var cheerio = Promise.promisifyAll(require("cheerio"));
 var cssB64 = require('css-b64-images-no-limit');
 var colors = require('colors');
 
@@ -74,22 +75,17 @@ var standalone = function (inputPath, inputFile, outputPath, getOpt) {
 		if ($(this).attr('src')) {
 			var RawJsPath = $(this).attr('src');
 			var jspath = path.join(inputPath, RawJsPath);
-			fs.stat(jspath, function (err, stat) {
-				if (err === null) {
-					$(this).remove();
-					console.log('js : '.green + jspath);
-					$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
-				} else if (err.code == 'ENOENT') {
-					console.log('File does not found.'.red + ' skip.');
-					$(this).remove();
-				} else {
-					console.log('File does not found.'.red + ' skip.');
-					$(this).remove();
-				}
-			});
+			if (fs.existsSync(jspath)) {
+				console.log('js : '.green + jspath);
+				$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
+				$(this).remove();
+			} else {
+				console.log('File does not found.'.red + ' skip.');
+				$(this).remove();
+			}
 		}
 	});
-	
+
 	getOpt($.html(), outputPath);
 }
 
