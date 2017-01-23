@@ -2,7 +2,7 @@
 include all external css/js and encode image in base64 into a single html file.
 
 
- Usage: standalone [options] < full path to source html >
+Usage: standalone [options] < full path to source html >
 
   Options:
 
@@ -10,4 +10,6 @@ include all external css/js and encode image in base64 into a single html file.
     -V, --version             output the version number
     -o, --output              full path to output file
     -m, --minify              minify the html file
+    -j, --justminify          minify the html file without include script and image
+
 
