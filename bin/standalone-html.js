@@ -17,16 +17,17 @@ commandLine
 	.usage('[options] <full path to source html>')
 	.option('-o, --output <directory>', 'full path to output file')
 	.option('-m, --minify', 'minify the html file')
+	.option('-j, --justminify', 'minify the html file without include script and image')
 	.parse(arg)
 
 var html = commandLine.args[0];
 var output = commandLine.output ? commandLine.output : 'index_standalone.html';
 
 var opt = {
-	removeAttributeQuotes: false,
-	minifyCSS: false,
-	minifyJS: false,
-	collapseWhitespace: false
+	removeAttributeQuotes: true,
+	minifyCSS: true,
+	minifyJS: true,
+	collapseWhitespace: true
 };
 
 if (!html) {
@@ -55,7 +56,9 @@ function startApp() {
 	var outputPath = output;
 	var currentDir = process.cwd();
 
-	if (output && html) {
+	if (output && html && commandLine.justminify) {
+		minifyFile(inputFile, outputPath);
+	} else if (output && html) {
 		standalone(inputPath, inputFile, outputPath, getOpt);
 	} else {
 		commandLine.help();
