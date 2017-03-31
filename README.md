@@ -9,7 +9,7 @@ Usage: standalone [options] < full path to source html >
     -h, --help                output usage information
     -V, --version             output the version number
     -o, --output              full path to output file
-    -m, --minify              minify the html file
-    -j, --justminify          minify the html file without include script and image
+    -m, --minifyAll           minify the html file, include all scripts, css & image
+    -j, --justminify          minify the html file
 
 
