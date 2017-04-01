@@ -10,9 +10,9 @@ $ npm install -g standalone-html
 ```
 
 ## Usage 
-
-standalone [options] _foo.html_ --output _mySinglePage.html_
-
+```
+$ standalone [options] foo.html --output mySinglePage.html
+```
   Options:
 
     -h, --help                output usage information
