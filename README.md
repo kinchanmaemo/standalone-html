@@ -1,6 +1,12 @@
 # standalone-html
 include all external css/js and encode image in base64 into a single html file.
 
+# Installation
+
+You can use npm package to get module installed
+
+npm install -g standalone-html
+
 
 Usage: standalone [options] < full path to source html >
 
