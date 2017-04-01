@@ -14,20 +14,22 @@ var arg = process.argv;
 // options
 commandLine
 	.version('standalone-html v' + pkg.version)
-	.usage('[options] <full path to source html>')
-	.option('-o, --output <directory>', 'full path to output file')
-	.option('-m, --minify', 'minify the html file')
-	.option('-j, --justminify', 'minify the html file without include script and image')
+	.usage('[options] <full path to source html> --output <path>')
+	.option('-o, --output <path>', 'full path to output file')
+	.option('-m, --minifyall', 'minify the html file, include all scripts, css & image')
+	.option('-j, --justminify', 'minify the html')
 	.parse(arg)
 
+
 var html = commandLine.args[0];
-var output = commandLine.output ? commandLine.output : 'index_standalone.html';
+var output = (commandLine.output === undefined) ? 'index_standalone.html' : commandLine.output;
 
 var opt = {
 	removeAttributeQuotes: true,
 	minifyCSS: true,
 	minifyJS: true,
-	collapseWhitespace: true
+	collapseWhitespace: true,
+	removeComments: true
 };
 
 if (!html) {
@@ -67,23 +69,30 @@ function startApp() {
 
 //parse options 
 function getOpt(resHtml, outputPath) {
-	if (commandLine.minify) {
+	if (commandLine.minifyall) {
 		console.log('');
 		console.log('minify all. Process may take a few minutes with large file.');
+		console.log('');
 		minifyFile(resHtml, outputPath);
 	} else {
+		console.log('');
+		console.log('Output file name : ' + outputPath);
+		console.log('');
 		writeFile(resHtml, outputPath);
 	}
 }
 
 //minify the result
 function minifyFile(resHtml, outputPath) {
-	var resHtml = minify(resHtml, opt, function(err) {
+	var resHtml = minify(resHtml, opt, function (err) {
 		if (err) {
 			console.log('error will processing file.');
 		}
 	});
 
+	console.log('');
+	console.log('Output file name : ' + outputPath);
+	console.log('');
 	writeFile(resHtml, outputPath);
 }
 
