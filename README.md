@@ -13,7 +13,7 @@ $ npm install -g standalone-html
 ## CLI Usage 
 ```
 $ standalone [options] foo.html --output mySinglePage.html
-$ standalone -m /full/path/to/index.html --output /other/path/spa.html -e "[ /</ ]"
+$ standalone -m /full/path/to/source.html -o /other/path/to/result.html -e "[ regex ]"
 $ standalone -j /full/path/to/index.html 
 ```
 
@@ -35,7 +35,7 @@ If output filename is not given, it will be named '_index_standalone.html_' by d
 var standalone = require('standalone-html');
 var standalone = standalone.api;
 
-var regex = '[ /</ ]'; // leave it empty if no regular expression is needed
+var regex = '[ /someChar/ ]'; // leave it empty if no regular expression is needed
 
 standalone('/full/path/to/source.html', '/path/to/output.html', regex , function(err){
   if (err) {
