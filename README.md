@@ -9,15 +9,20 @@ You can use npm package to get module installed
 $ npm install -g standalone-html
 ```
 
-## Usage 
+## CLI Usage 
 ```
 $ standalone [options] foo.html --output mySinglePage.html
+$ standalone -m /full/path/to/index.html --output /other/path/spa.html -e "[ /</ ]"
+$ standalone -j /full/path/to/index.html 
 ```
+If output filename is not given, it will be named '_index_standalone.html_' by default.
+
   Options:
 
     -h, --help                output usage information
     -V, --version             output the version number
+    -e, --escape "[ regex ]"  ignore the given regular expression when minify
+    -o, --output              full path to output file
     -m, --minifyall           minify the html file, include all scripts, css & image
     -j, --justminify          minify the html file
-    -o, --output              full path to output file
 
