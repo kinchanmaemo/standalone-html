@@ -16,6 +16,7 @@ commandLine
 	.version('standalone-html v' + pkg.version)
 	.usage('[options] <full path to source html> --output <path>')
 	.option('-o, --output <path>', 'full path to output file')
+	.option('-e, --escape "[ regex ]"', 'ignore the given regular expression when minify')
 	.option('-m, --minifyall', 'minify the html file, include all scripts, css & image')
 	.option('-j, --justminify', 'minify the html')
 	.parse(arg)
@@ -23,13 +24,15 @@ commandLine
 
 var html = commandLine.args[0];
 var output = (commandLine.output === undefined) ? 'index_standalone.html' : commandLine.output;
+var escapeChar = (commandLine.escape === undefined) ? '' : commandLine.escape;
 
 var opt = {
-	removeAttributeQuotes: true,
+	removeAttributeQuotes: false,
 	minifyCSS: true,
 	minifyJS: true,
 	collapseWhitespace: true,
-	removeComments: true
+	removeComments: true,
+	ignoreCustomFragments: eval(escapeChar)
 };
 
 if (!html) {
@@ -39,7 +42,7 @@ if (!html) {
 	fs.stat(html, function (err, stat) {
 		if (err === null) {
 			console.log('');
-			console.log('Proceed file : ' + html);
+			console.log('Target file : ' + html);
 			console.log('');
 			startApp();
 		} else if (err.code == 'ENOENT') {
@@ -61,7 +64,7 @@ function startApp() {
 	if (output && html && commandLine.justminify) {
 		minifyFile(inputFile, outputPath);
 	} else if (output && html) {
-		standalone(inputPath, inputFile, outputPath, getOpt);
+		standalone.cli(inputPath, inputFile, outputPath, getOpt);
 	} else {
 		commandLine.help();
 	}
@@ -86,7 +89,7 @@ function getOpt(resHtml, outputPath) {
 function minifyFile(resHtml, outputPath) {
 	var resHtml = minify(resHtml, opt, function (err) {
 		if (err) {
-			console.log('error will processing file.');
+			console.error('error will processing file.');
 		}
 	});
 
