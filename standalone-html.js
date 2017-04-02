@@ -90,7 +90,61 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 	getOpt($.html(), outputPath);
 }
 
-module.exports.api = function (inputFilePath, outputPath, getOpt) {
+module.exports.api = function (inputFilePath, outputPath, escape, callback) {
+
+	console.log('start');
+	var getOpt = function (resHtml, outputPath, minifyOpt, escapeChar) {
+
+		var opt = {
+			removeAttributeQuotes: false,
+			minifyCSS: true,
+			minifyJS: true,
+			collapseWhitespace: true,
+			removeComments: true,
+			ignoreCustomFragments: eval(escapeChar)
+		};
+
+		if (minifyOpt) {
+			console.log('');
+			console.log('minify all. Process may take a few minutes with large file.');
+			console.log('');
+
+			var resHtml = minify(resHtml, opt, function (err) {
+				if (err) {
+					console.error('error will processing file.');
+				}
+			});
+
+			console.log('');
+			console.log('Output file name : ' + outputPath);
+			console.log('');
+
+			fs.writeFile(outputPath, resHtml, function (err) {
+				if (err) {
+					console.log('');
+					console.log('File error: ' + err + '. Exit.');
+				} else {
+					console.log('');
+					console.log('All done. Exit.');
+					callback();
+				}
+			});
+		} else {
+			console.log('');
+			console.log('Output file name : ' + outputPath);
+			console.log('');
+			fs.writeFile(outputPath, resHtml, function (err) {
+				if (err) {
+					console.log('');
+					return console.log('File error: ' + err + '. Exit.');
+				} else {
+					console.log('');
+					return console.log('All done. Exit.');
+					callback();
+				}
+			});
+		}
+	}
 
 	var inputPath = path.dirname(inputFilePath);
 	var inputFile = fs.readFileSync(inputFilePath, 'utf-8');
@@ -174,56 +228,7 @@ module.exports.api = function (inputFilePath, outputPath, getOpt) {
 		}
 	});
 
-	getOpt($.html(), outputPath, minifyOpt);
+	var escapeChar = (escape === undefined || escape === '') ? '[]' : escape;
 
-}
-
-module.exports.getOpt = function (resHtml, outputPath, minifyOpt) {
-	if (minifyOpt) {
-		console.log('');
-		console.log('minify all. Process may take a few minutes with large file.');
-		console.log('');
-		minifyFile(resHtml, outputPath);
-	} else {
-		console.log('');
-		console.log('Output file name : ' + outputPath);
-		console.log('');
-		writeFile(resHtml, outputPath);
-	}
-}
-
-module.exports.minifyFile = function (resHtml, outputPath) {
-	//var escapeChar = (commandLine.escape === undefined) ? '' : commandLine.escape;
-
-	var opt = {
-		removeAttributeQuotes: false,
-		minifyCSS: true,
-		minifyJS: true,
-		collapseWhitespace: true,
-		removeComments: true
-			//ignoreCustomFragments: eval(escapeChar)
-	};
-	
-	var resHtml = minify(resHtml, opt, function (err) {
-		if (err) {
-			console.error('error will processing file.');
-		}
-	});
-
-	console.log('');
-	console.log('Output file name : ' + outputPath);
-	console.log('');
-	writeFile(resHtml, outputPath);
-}
-
-module.exports.writeFile = function (resHtml, outputPath) {
-	fs.writeFile(outputPath, resHtml, function (err) {
-		if (err) {
-			console.log('');
-			console.log('File error: ' + err + '. Exit.');
-		} else {
-			console.log('');
-			console.log('All done. Exit.'.green);
-		}
-	});
+	getOpt($.html(), outputPath, minifyOpt, escapeChar);
 }
