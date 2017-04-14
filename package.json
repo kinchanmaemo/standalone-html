@@ -1,6 +1,6 @@
 {
   "name": "standalone-html",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "include all external css/js and encode image in base64 into a single html file.",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "cheerio": "^0.22.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
+    "fs-extra": "^2.0.0",
     "css-b64-images-no-limit": "^0.2.4",
     "download": "^5.0.3",
     "html-minifier": "^3.2.3"
