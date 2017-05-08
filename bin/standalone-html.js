@@ -24,7 +24,7 @@ commandLine
 
 var html = commandLine.args[0];
 var output = (commandLine.output === undefined) ? 'index_standalone.html' : commandLine.output;
-var escapeChar = (commandLine.escape === undefined) ? '' : commandLine.escape;
+var escapeChar = (commandLine.escape === undefined) ? '[]' : commandLine.escape;
 
 var opt = {
 	removeAttributeQuotes: false,
