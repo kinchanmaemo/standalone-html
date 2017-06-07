@@ -23,7 +23,7 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 		if ($(this).attr('href')) {
 			var RawCssPath = $(this).attr('href');
 			var RawCssType = $(this).attr('type') ? $(this).attr('type') : 'undefined';
-			var csspath = path.join(inputPath, RawCssPath);
+			var csspath = path.join(inputPath, RawCssPath).replace(/%20/g,' ');
 			// check if not a web link
 			if (RawCssPath.slice(0, 4) !== "http" && path.extname(RawCssPath) === '.css') {
 				if (fs.existsSync(csspath)) {
@@ -43,7 +43,7 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 			} else if (RawCssPath.slice(0, 4) !== "http" && RawCssType.slice(0, 5) === 'image') {
 				if (fs.existsSync(csspath)) {
 					console.log('link icon : '.cyan + csspath);
-					var imgpath = path.join(inputPath, RawCssPath);
+					var imgpath = path.join(inputPath, RawCssPath).replace(/%20/g,' ');
 					var img = fs.readFileSync(imgpath);
 					var contentType = imageTypes[path.extname(imgpath)] || 'image/png'
 					var dataUri = "data:" + contentType + ";base64," + img.toString("base64");
@@ -59,7 +59,7 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 	$('html').find('img').each(function () {
 		if ($(this).attr('src')) {
 			var RawImgPath = $(this).attr('src');
-			var imgpath = path.join(inputPath, RawImgPath);
+			var imgpath = path.join(inputPath, RawImgPath).replace(/%20/g,' ');
 			if (fs.existsSync(imgpath)) {
 				var img = fs.readFileSync(imgpath);
 				var contentType = imageTypes[path.extname(imgpath)] || 'image/png';
@@ -75,7 +75,7 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 	$('html').find('script').each(function () {
 		if ($(this).attr('src')) {
 			var RawJsPath = $(this).attr('src');
-			var jspath = path.join(inputPath, RawJsPath);
+			var jspath = path.join(inputPath, RawJsPath).replace(/%20/g,' ');
 			if (fs.existsSync(jspath)) {
 				console.log('js : '.green + jspath);
 				$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
@@ -164,7 +164,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 		if ($(this).attr('href')) {
 			var RawCssPath = $(this).attr('href');
 			var RawCssType = $(this).attr('type') ? $(this).attr('type') : 'undefined';
-			var csspath = path.join(inputPath, RawCssPath);
+			var csspath = path.join(inputPath, RawCssPath).replace(/%20/g,' ');
 			// check if not a web link
 			if (RawCssPath.slice(0, 4) !== "http" && path.extname(RawCssPath) === '.css') {
 				if (fs.existsSync(csspath)) {
@@ -200,7 +200,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 	$('html').find('img').each(function () {
 		if ($(this).attr('src')) {
 			var RawImgPath = $(this).attr('src');
-			var imgpath = path.join(inputPath, RawImgPath);
+			var imgpath = path.join(inputPath, RawImgPath).replace(/%20/g,' ');
 			if (fs.existsSync(imgpath)) {
 				var img = fs.readFileSync(imgpath);
 				var contentType = imageTypes[path.extname(imgpath)] || 'image/png';
@@ -216,7 +216,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 	$('html').find('script').each(function () {
 		if ($(this).attr('src')) {
 			var RawJsPath = $(this).attr('src');
-			var jspath = path.join(inputPath, RawJsPath);
+			var jspath = path.join(inputPath, RawJsPath).replace(/%20/g,' ');
 			if (fs.existsSync(jspath)) {
 				console.log('js : '.green + jspath);
 				$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
