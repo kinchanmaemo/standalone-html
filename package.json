@@ -1,6 +1,6 @@
 {
   "name": "standalone-html",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "include all external css/js and encode image in base64 into a single html file.",
   "main": "index.js",
   "scripts": {
