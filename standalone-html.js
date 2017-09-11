@@ -17,6 +17,26 @@ var imageTypes = {
 	".webp": "image/webp"
 }
 
+function replaceScripts($, inputPath) {
+	$('html').find('script').each(function() {
+		if ($(this).attr('src')) {
+			var RawJsPath = $(this).attr('src');
+			var spath = path.join(inputPath, RawJsPath).replace(/%20/g,' ');
+			if (fs.existsSync(spath)) {
+        console.log('js : '.green + spath);
+        var content = fs.readFileSync(spath, 'utf-8');
+        var inlineScript = $(this).clone();
+        inlineScript.removeAttr('src');
+        inlineScript.text(content);
+        $(this).replaceWith(inlineScript);
+			} else {
+				console.log('/!\\ File not found >>> '.red + spath);
+				$(this).remove();
+			}
+		}
+  });
+}
+
 module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 	var $ = cheerio.load(inputFile);
 	$('html').find('link').each(function () {
@@ -72,27 +92,13 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 		}
 	});
 
-	$('html').find('script').each(function () {
-		if ($(this).attr('src')) {
-			var RawJsPath = $(this).attr('src');
-			var jspath = path.join(inputPath, RawJsPath).replace(/%20/g,' ');
-			if (fs.existsSync(jspath)) {
-				console.log('js : '.green + jspath);
-				$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
-				$(this).remove();
-			} else {
-				console.log('/!\\ File not found >>> '.red + jspath);
-				$(this).remove();
-			}
-		}
-	});
+  replaceScripts($, inputPath);
 
 	getOpt($.html(), outputPath);
 }
 
 module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 
-	console.log('start');
 	var getOpt = function (resHtml, outputPath, minifyOpt, escapeChar) {
 
 		var opt = {
@@ -213,20 +219,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 		}
 	});
 
-	$('html').find('script').each(function () {
-		if ($(this).attr('src')) {
-			var RawJsPath = $(this).attr('src');
-			var jspath = path.join(inputPath, RawJsPath).replace(/%20/g,' ');
-			if (fs.existsSync(jspath)) {
-				console.log('js : '.green + jspath);
-				$('html').find('body').last().append('<script>' + fs.readFileSync(jspath, 'utf-8') + '</script>');
-				$(this).remove();
-			} else {
-				console.log('/!\\ File not found >>> '.red + jspath);
-				$(this).remove();
-			}
-		}
-	});
+  replaceScripts($, inputPath);
 
 	var escapeChar = (escape === undefined || escape === '') ? '[]' : escape;
 
