@@ -78,7 +78,7 @@ module.exports.cli = function (inputPath, inputFile, outputPath, getOpt) {
 
 	$('html').find('img').each(function () {
 		if ($(this).attr('src')) {
-			var RawImgPath = $(this).attr('src');
+			var RawImgPath = $(this).attr('src').split('?')[0];
 			var imgpath = path.join(inputPath, RawImgPath).replace(/%20/g,' ');
 			if (fs.existsSync(imgpath)) {
 				var img = fs.readFileSync(imgpath);
@@ -205,7 +205,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 
 	$('html').find('img').each(function () {
 		if ($(this).attr('src')) {
-			var RawImgPath = $(this).attr('src');
+			var RawImgPath = $(this).attr('src').split('?')[0];
 			var imgpath = path.join(inputPath, RawImgPath).replace(/%20/g,' ');
 			if (fs.existsSync(imgpath)) {
 				var img = fs.readFileSync(imgpath);
