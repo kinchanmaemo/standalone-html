@@ -14,6 +14,7 @@ var imageTypes = {
 	".jpg": "image/jpeg",
 	".jpeg": "image/jpeg",
 	".bmp": "image/bmp",
+	".svg": "image/svg+xml",
 	".webp": "image/webp"
 }
 
@@ -162,6 +163,7 @@ module.exports.api = function (inputFilePath, outputPath, escape, callback) {
 		".jpg": "image/jpeg",
 		".jpeg": "image/jpeg",
 		".bmp": "image/bmp",
+		".svg": "image/svg+xml",
 		".webp": "image/webp"
 	}
 
