@@ -21,7 +21,7 @@
     "image"
   ],
   "author": "Hergal <kinchan.maemo@gmail.com>",
-  "license": "LGPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.4.7",
     "cheerio": "^0.22.0",
