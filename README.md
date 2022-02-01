@@ -32,8 +32,7 @@ If output filename is not given, it will be named '_index_standalone.html_' by d
 
 ## API Usage 
 ```
-var standalone = require('standalone-html');
-var standalone = standalone.api;
+var standalone = require('standalone-html').api;
 
 var regex = '[ /someChar/ ]'; // leave it empty if no regular expression is needed
 
