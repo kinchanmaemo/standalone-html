@@ -10,11 +10,18 @@ You can use npm package to get module installed
 $ npm install -g standalone-html
 ```
 
+or from source code
+```
+$ git clone gh repo clone kinchanmaemo/standalone-html
+$ cd standalone-html && npm install
+$ cd .. && npm link ./standalone-html
+```
+
 ## CLI Usage 
 ```
 $ standalone [options] foo.html --output mySinglePage.html
 $ standalone -m /full/path/to/source.html -o /other/path/to/result.html -e "[ regex ]"
-$ standalone -j /full/path/to/index.html 
+$ standalone -m /full/path/to/index.html 
 ```
 
 If output filename is not given, it will be named '_index_standalone.html_' by default.
@@ -24,7 +31,7 @@ If output filename is not given, it will be named '_index_standalone.html_' by d
 
     -h, --help                output usage information
     -V, --version             output the version number
-    -e, --escape "[ regex ]"  ignore the given regular expression when minify
+    -e, --escape "[ regex ]"  ignore the given regular expression when minify (optional)
     -o, --output              full path to output file
     -m, --minifyall           minify the html file, include all scripts, css & image
     -j, --justminify          minify the html file
